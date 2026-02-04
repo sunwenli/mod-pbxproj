@@ -1,5 +1,6 @@
 import unittest
-from pbxproj.pbxsections.PBXGenericBuildPhase import *
+
+from pbxproj import PBXGenericBuildPhase, PBXGenericObject
 
 
 class PBXGenericBuildPhaseTest(unittest.TestCase):
@@ -7,8 +8,8 @@ class PBXGenericBuildPhaseTest(unittest.TestCase):
         build_phase = PBXGenericBuildPhase.create(name="build_phase")
         result = build_phase.add_build_file(PBXGenericObject().parse({}))
 
-        self.assertFalse(result)
-        self.assertListEqual(build_phase.files, [])
+        assert not result
+        assert build_phase.files == []
 
     def testRemoveBuildFileFailed(self):
         build_phase = PBXGenericBuildPhase.create(name="build_phase")
@@ -16,4 +17,4 @@ class PBXGenericBuildPhaseTest(unittest.TestCase):
 
         result = build_phase.remove_build_file(None)
 
-        self.assertFalse(result)
+        assert not result

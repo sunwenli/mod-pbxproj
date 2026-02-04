@@ -10,13 +10,14 @@ class PBXGenericObject(object):
     Generic class that creates internal attributes to match the structure of the tree used to create the element.
     Also, prints itself using the openstep format. Extensions might be required to insert comments on right places.
     """
-    _VALID_KEY_REGEX = re.compile(r'^[a-zA-Z0-9\\._/]*$')
+    # use negative look-ahead to avoid matching the newline character in multiline strings
+    _VALID_KEY_REGEX = re.compile(r'^[a-zA-Z0-9\\._/]*(?!\n)$')
     _ESCAPE_REPLACEMENTS = [
         ('\\', '\\\\'),
         ('\n', '\\n'),
         ('\"', '\\"'),
         ('\0', '\\0'),
-        ('\t', '\\\t'),
+        ('\t', '\\t'),
         ('\'', '\\\''),
     ]
 
@@ -127,6 +128,9 @@ class PBXGenericObject(object):
 
     def __getitem__(self, key):
         return getattr(self, key, None)
+
+    def get(self, key, default):
+        return getattr(self, key, default)
 
     def __setitem__(self, key, value):
         if type(value) is list:

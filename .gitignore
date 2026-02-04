@@ -13,3 +13,7 @@ coverage.xml
 # Mac OS X cruft
 .DS_Store
 tests/parent_group
+*.bak
+
+# VSCode files
+.vscode

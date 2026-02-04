@@ -1,8 +1,9 @@
 import unittest
-from pbxproj.pbxsections.PBXHeadersBuildPhase import *
+
+from pbxproj import PBXHeadersBuildPhase
 
 
 class PBXHeadersBuildPhaseTest(unittest.TestCase):
     def testGetComment(self):
         obj = PBXHeadersBuildPhase()
-        self.assertEqual(obj._get_comment(), u'Headers')
+        assert obj._get_comment() == u'Headers'

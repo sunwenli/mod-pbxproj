@@ -1,5 +1,6 @@
 from pbxproj.pbxsections.PBXBuildFile import *
 from pbxproj.pbxsections.PBXFileReference import *
+from pbxproj.pbxsections.PBXFileSystemSynchronizedRootGroup import *
 from pbxproj.pbxsections.PBXFrameworksBuildPhase import *
 from pbxproj.pbxsections.PBXProject import *
 from pbxproj.pbxsections.PBXResourcesBuildPhase import *
@@ -16,3 +17,6 @@ from pbxproj.pbxsections.PBXNativeTarget import *
 from pbxproj.pbxsections.PBXLegacyTarget import *
 from pbxproj.pbxsections.PBXReferenceProxy import *
 from pbxproj.pbxsections.PBXGroup import *
+from pbxproj.pbxsections.XCSwiftPackageProductDependency import *
+from pbxproj.pbxsections.XCRemoteSwiftPackageReference import *
+from pbxproj.pbxsections.XCLocalSwiftPackageReference import *

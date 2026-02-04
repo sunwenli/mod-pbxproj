@@ -24,8 +24,6 @@ target options:
     -B, --build-phase-files <type>  Show the files associated to the build phase of the given type.
 """
 
-from pbxproj.pbxcli import *
-
 
 def execute(project, args):
     # make a decision of what function to call based on the -D flag
@@ -35,7 +33,7 @@ def execute(project, args):
         return _summary(project, args)
 
 
-def _summary(project, args):
+def _summary(project, _):
     info = ''
     for target in project.objects.get_targets():
         configs = ', '.join([c.name for c in project.objects.get_configurations_on_targets(target.name)])
@@ -53,17 +51,7 @@ def _summary(project, args):
 
 
 def _target_info(project, target_name, args):
-    build_phases = []
-    if args['--source-files']:
-        build_phases += ['PBXSourcesBuildPhase']
-    elif args['--header-files']:
-        build_phases += ['PBXHeadersBuildPhase']
-    elif args['--resource-files']:
-        build_phases += ['PBXResourcesBuildPhase']
-    elif args['--framework-files']:
-        build_phases += ['PBXFrameworksBuildPhase']
-    elif args['--build-phase-files']:
-        build_phases += [args['--build-phase-files']]
+    build_phases = _process_parameters(args)
 
     info = ''
     for target in project.objects.get_targets(target_name):
@@ -86,3 +74,18 @@ def _target_info(project, target_name, args):
                 info += f'{formatted_files}\n'
         info += '\n'
     return info
+
+
+def _process_parameters(args):
+    build_phases = []
+    if args['--source-files']:
+        build_phases += ['PBXSourcesBuildPhase']
+    elif args['--header-files']:
+        build_phases += ['PBXHeadersBuildPhase']
+    elif args['--resource-files']:
+        build_phases += ['PBXResourcesBuildPhase']
+    elif args['--framework-files']:
+        build_phases += ['PBXFrameworksBuildPhase']
+    elif args['--build-phase-files']:
+        build_phases += [args['--build-phase-files']]
+    return build_phases

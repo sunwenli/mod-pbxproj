@@ -1,25 +1,29 @@
 
-.. image:: https://img.shields.io/github/workflow/status/kronenthaler/mod-pbxproj/branch-check/master?logo=github&style=flat-square
+.. image:: https://img.shields.io/github/actions/workflow/status/kronenthaler/mod-pbxproj/branch-check.yml?event=push&style=flat&logo=github&color=4da533
    :target: https://github.com/kronenthaler/mod-pbxproj/actions?query=workflow%3Abranch-check
    :alt: GitHub Workflow Status (branch)
 
-.. image:: https://img.shields.io/codacy/coverage/70c14211ba704d2893f7b0f54bb04da7/master?logo=codacy&style=flat-square   
-   :alt: Codacy branch coverage
-   :target: https://www.codacy.com/app/kronenthaler/mod-pbxproj?utm_source=github.com&utm_medium=referral&utm_content=kronenthaler/mod-pbxproj&utm_campaign=badger
-   
-.. image:: https://img.shields.io/codacy/grade/70c14211ba704d2893f7b0f54bb04da7?logo=codacy&style=flat-square
-   :target: https://www.codacy.com/app/kronenthaler/mod-pbxproj?utm_source=github.com&utm_medium=referral&utm_content=kronenthaler/mod-pbxproj&utm_campaign=badger
-   :alt: Codacy grade
+.. image:: https://sonarcloud.io/api/project_badges/measure?project=kronenthaler_mod-pbxproj&metric=alert_status
+   :target: https://sonarcloud.io/summary/new_code?id=kronenthaler_mod-pbxproj
+   :alt: Sonar Quality Gate status
 
-.. image:: https://img.shields.io/pypi/v/pbxproj?color=97cb02&logo=python&logoColor=ffffff&style=flat-square
+.. image:: https://sonarcloud.io/api/project_badges/measure?project=kronenthaler_mod-pbxproj&metric=coverage
+   :target: https://sonarcloud.io/component_measures?metric=coverage&id=kronenthaler_mod-pbxproj
+   :alt: Sonar branch coverage
+
+.. image:: https://sonarcloud.io/api/project_badges/measure?project=kronenthaler_mod-pbxproj&metric=reliability_rating
+   :target: https://sonarcloud.io/summary/new_code?id=kronenthaler_mod-pbxproj
+   :alt: Sonar reliability grade
+
+.. image:: https://img.shields.io/pypi/v/pbxproj?logo=python&logoColor=ffffff&style=flat&color=4da533
    :target: https://pypi.python.org/pypi/pbxproj
    :alt: PyPI
 
-.. image:: https://img.shields.io/pypi/dm/pbxproj?color=97cb02&logo=python&logoColor=ffffff&style=flat-square
+.. image:: https://img.shields.io/pypi/dm/pbxproj?logo=python&logoColor=ffffff&style=flat&color=4da533
    :target: https://pypi.python.org/pypi/pbxproj/
    :alt: PyPI - Downloads
 
-.. image:: https://img.shields.io/pypi/l/pbxproj?color=97cb02&style=flat-square
+.. image:: https://img.shields.io/pypi/l/pbxproj?style=flat&color=4da533
    :target: license.txt
    :alt: PyPI - License
 

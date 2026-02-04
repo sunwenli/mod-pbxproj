@@ -34,9 +34,10 @@ add options:
     -H, --header-scope <scope>     Add header file using the given scope. Available options: public or private, project.
                                        [default: project]
 """
-from pbxproj.pbxcli import *
-from pbxproj.pbxextensions.ProjectFiles import FileOptions
 from docopt import docopt
+
+from pbxproj.pbxcli import command_parser
+from pbxproj.pbxextensions.ProjectFiles import FileOptions
 
 
 def execute(project, args):
@@ -68,7 +69,7 @@ def _add(project, args):
 
     # print some information about the build files created.
     if build_files is None:
-        raise Exception('No files were added to the project.')
+        raise RuntimeError('No files were added to the project.')
 
     if not build_files:
         return 'File added to the project, no build file sections created.'
@@ -88,7 +89,7 @@ def _add(project, args):
 def _remove(project, args):
     if project.remove_files_by_path(args['<path>'], tree=args['--tree'], target_name=args['--target']):
         return 'File removed from the project.'
-    raise Exception('An error occurred removing one of the files.')
+    raise RuntimeError('An error occurred removing one of the files.')
 
 
 def main():

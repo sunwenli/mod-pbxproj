@@ -1,78 +1,88 @@
-import unittest
+import os
 import sys
 import tempfile
+import unittest
 from io import StringIO
-from pbxproj.pbxcli import *
+
+from pbxproj import XcodeProject
+from pbxproj.pbxcli import open_project, resolve_backup, backup_project, command_parser, PROJECT_PLACEHOLDER
+from tests.pbxcli import BASE_PROJECT_PATH
+import pytest
 
 
 class PBXCLITest(unittest.TestCase):
+    def setUp(self):
+        self.pwd = os.getcwd()
+        os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+
     def tearDown(self):
         if hasattr(self, 'backup_file') and self.backup_file:
             os.remove(self.backup_file)
         sys.stdout = sys.__stdout__
+        os.chdir(self.pwd)
 
     def testOpenProjectWithFullPath(self):
-        project = open_project({'<project>': 'samplescli/project.pbxproj'})
-        self.assertIsNotNone(project)
+        project = open_project({PROJECT_PLACEHOLDER: BASE_PROJECT_PATH})
+        assert project is not None
 
     def testOpenProjectWithDirectory(self):
-        project = open_project({'<project>': 'samplescli'})
-        self.assertIsNotNone(project)
+        project = open_project({PROJECT_PLACEHOLDER: 'samplescli'})
+        assert project is not None
 
     def testLoadingPlistFormat(self):
-        project = open_project({'<project>': 'samplescli/plist.pbxproj'})
-        self.assertIsNotNone(project)
+        project = open_project({PROJECT_PLACEHOLDER: 'samplescli/plist.pbxproj'})
+        assert project is not None
 
     def testOpenProjectInvalidPath(self):
-        with self.assertRaisesRegex(Exception, '^Project file not found'):
-            open_project({'<project>': 'whatever'})
+        with pytest.raises(Exception, match='^Project file not found'):
+            open_project({PROJECT_PLACEHOLDER: 'whatever'})
 
     def testBackupNoFlag(self):
-        project = XcodeProject({}, path='samplescli/project.pbxproj')
+        project = XcodeProject({}, path=BASE_PROJECT_PATH)
         self.backup_file = backup_project(project, {'--backup': False})
-        self.assertIsNone(self.backup_file)
+        assert self.backup_file is None
 
     def testBackupWithFlag(self):
-        project = XcodeProject({}, path='samplescli/project.pbxproj')
+        project = XcodeProject({}, path=BASE_PROJECT_PATH)
         self.backup_file = backup_project(project, {'--backup': True})
-        self.assertIsNotNone(self.backup_file)
+        assert self.backup_file is not None
 
     def testResolveBackupWithoutFlag(self):
-        project = XcodeProject({}, path='samplescli/project.pbxproj')
-        setattr(project, 'save', lambda: 1 is 1)
+        project = XcodeProject({}, path=BASE_PROJECT_PATH)
+        setattr(project, 'save', lambda: True)
         tmpfile = tempfile.NamedTemporaryFile()
 
         resolve_backup(project, tmpfile.name, {'--backup': False})
 
-        self.assertTrue(os.path.exists(tmpfile.name))
+        assert os.path.exists(tmpfile.name)
 
     def testResolveBackupWithFlag(self):
-        project = XcodeProject({}, path='samplescli/project.pbxproj')
-        setattr(project, 'save', lambda: 1 is 1)
+        project = XcodeProject({}, path=BASE_PROJECT_PATH)
+        setattr(project, 'save', lambda: True)
         tmpfile = tempfile.NamedTemporaryFile(delete=False)
 
         resolve_backup(project, tmpfile.name, {'--backup': True})
 
-        self.assertFalse(os.path.exists(tmpfile.name))
+        assert not os.path.exists(tmpfile.name)
 
     def testCommandWithSuccess(self):
         function = lambda p, a: u'test'
         parser = command_parser(function)
         sys.stdout = StringIO()
-        parser({u'<project>': u'samplescli/project.pbxproj', u'--backup': False})
-        self.assertEqual(sys.stdout.getvalue().strip(), u'test')
+        parser({PROJECT_PLACEHOLDER: BASE_PROJECT_PATH, u'--backup': False})
+        assert sys.stdout.getvalue().strip() == u'test'
 
     def testCommandWithFailure(self):
         function = lambda p, a: u'test'
         parser = command_parser(function)
         sys.stdout = StringIO()
-        with self.assertRaisesRegex(SystemExit, '^1'):
-            parser({u'<project>': u'whatever/project.pbxproj', u'--backup': False})
-        self.assertEqual(sys.stdout.getvalue().strip(), u'Project file not found')
+        with pytest.raises(SystemExit, match='^1'):
+            parser({PROJECT_PLACEHOLDER: u'whatever/project.pbxproj', u'--backup': False})
+        assert sys.stdout.getvalue().strip() == u'Project file not found'
 
     def testOpenFileWithBrokenReferences(self):
         sys.stderr = StringIO()
-        _ = open_project({'<project>': 'samplescli/broken-references.pbxproj'})
-        self.assertEqual(sys.stderr.getvalue().strip(), '[WARNING] The project contains missing/broken references that '
-                                                        'may cause other problems. Open your project in Xcode and '
-                                                        'resolve all red-colored files.')
+        _ = open_project({PROJECT_PLACEHOLDER: 'samplescli/broken-references.pbxproj'})
+        assert sys.stderr.getvalue().strip() == '[WARNING] The project contains missing/broken references that ' \
+                                                        'may cause other problems. Open your project in Xcode and ' \
+                                                        'resolve all red-colored files.'
